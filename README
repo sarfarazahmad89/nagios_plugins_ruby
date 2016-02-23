@@ -1,0 +1,24 @@
+## Created by Sarfaraz Ahmad
+
+## check_smart_attr.rb
+This is a Nagios/Icinga2 plugin that retrieves a couple of HDD S.M.A.R.T attributes and reports HDD health based on them.
+
+-- INSTALLATION
+For this plugin to work you need :
+* The ruby runtime (yum install ruby for Redhat Distros)
+* HDD that supports SMART
+* smartmontools package installed (use yum install smartmontools). This package provides smartctl on which the below mentioned library works.
+* The Ruby Library that calls smartctl. Get the library from here https://github.com/AdMeGroup/smart_status. Credits for the library go to developer.
+	use "gem build;gem install" to install the gem.
+
+-- USAGE
+call the plugin like this 
+/usr/lib64/nagios/plugins/check_smart_attr.rb <device_name>
+
+
+
+
+
+
+
+	

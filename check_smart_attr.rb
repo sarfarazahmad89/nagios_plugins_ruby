@@ -3,6 +3,9 @@ require 'smart_status'
 require 'pp'
 device_valid = SMARTStatus::Parser.new(ARGV[0])
 
+printlist=[]
+
+
 ########################################################################
 ## Error Handling for this script's arguments
 ########################################################################
@@ -28,12 +31,50 @@ temp_crit_value=45
 temp_warn_value="-"
 
 if temp_attr.raw > temp_crit_value
-   temp_msg="HDD Temperature exceeds safe limits."
+   temp_msg="Value exceeds safe limits."
    temp_state="WARNING"
 else 
-   temp_msg="HDD Temperature within limits"
+   temp_msg="Value within limits"
    temp_state="OK"
 end
+
+
+########################################################################
+## Reallocated Sector Count (WARN/CRITICAL/OK)
+########################################################################
+
+reallocated_attr=device_output[:reallocated_sector_ct]
+if reallocated_attr.raw > reallocated_attr.threshold_level
+   reallocated_msg = "HDD may fail."
+   reallocated_state="WARNING"
+
+elsif reallocated_attr.raw > reallocated_attr.threshold_value
+   reallocated_msg = "HDD failure is imminent."
+   reallocated_state="CRITICAL"
+
+else
+   reallocated_msg="Value within limits"
+   reallocated_state="OK"
+end
+
+########################################################################
+##  Current_Pending_Sector 
+########################################################################
+
+curr_pending_attr=device_output[:current_pending_sector]
+curr_pending_warn="-"
+
+if curr_pending_attr.raw > reallocated_attr.threshold_value
+   curr_pending_msg = "HDD failure is imminent."
+   curr_pending_state="CRITICAL"
+
+else
+   curr_pending_msg="Value within limits"
+   curr_pending_state="OK"
+end
+
+
+
 
 ########################################################################
 ## the 'Printer' class for pretty printing
@@ -106,11 +147,20 @@ end
 ## 'main' object : instantiation
 ##########################################################################
 
-printlist=[]
 temp=Printer.new("Temperature",temp_warn_value.to_s,temp_crit_value.to_s,temp_attr.raw.to_s,temp_state,temp_msg)
 printlist <<temp
+
+reallocated_st=Printer.new("ReallocatedSectorCount",reallocated_attr.threshold_level.to_s,reallocated_attr.threshold_value.to_s,reallocated_attr.raw.to_s,reallocated_state,reallocated_msg)
+printlist <<reallocated_st
+
+current_pending_st=Printer.new("CurrentPendingSectorCount",curr_pending_warn.to_s,curr_pending_attr.threshold_value.to_s,curr_pending_attr.raw.to_s,curr_pending_state,curr_pending_msg)
+printlist <<current_pending_st
+
+
 format="%#{Printer.max_title}s\t%#{Printer.max_warn}s\t%#{Printer.max_crit}s\t%#{Printer.max_current}s\t%#{Printer.max_state}s\t%#{Printer.max_msg}s\n"
 printf(format, "Attribute", "Warn", "Crit","Current","State","Remarks")
+printf(format, "------", "-----", "----","----","----","------")
+
 #printf("----------------------------------------------------------\n")
 printlist.each do |p|
     printf(format, p.title,p.warn,p.crit,p.current,p.state,p.msg)

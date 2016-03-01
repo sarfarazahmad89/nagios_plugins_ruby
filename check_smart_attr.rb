@@ -74,6 +74,27 @@ else
 end
 
 
+########################################################################
+##  Spin_Retry_Count
+########################################################################
+
+spin_retry_attr=device_output[:spin_retry_count]
+spin_retry_warn=spin_retry_attr.threshold_value-spin_retry_attr.threshold_level
+
+
+
+if spin_retry_attr.raw > spin_retry_attr.threshold_value
+   spin_retry_msg = "HDD failure is imminent."
+   spin_retry_state="CRITICAL"
+elsif spin_retry_attr.raw > spin_retry_warn
+   spin_retry_msg = "HDD may fail ."
+   spin_retry_state="WARNING"
+
+else
+   spin_retry_msg="Value within limits"
+   spin_retry_state="OK"
+end
+
 
 
 ########################################################################
@@ -155,6 +176,11 @@ printlist <<reallocated_st
 
 current_pending_st=Printer.new("CurrentPendingSectorCount",curr_pending_warn.to_s,curr_pending_attr.threshold_value.to_s,curr_pending_attr.raw.to_s,curr_pending_state,curr_pending_msg)
 printlist <<current_pending_st
+
+
+
+spin_retry_ct=Printer.new("SpinRetryCount",spin_retry_warn.to_s,spin_retry_attr.threshold_value.to_s,spin_retry_attr.raw.to_s,spin_retry_state,spin_retry_msg)
+printlist <<spin_retry_ct
 
 
 format="%#{Printer.max_title}s\t%#{Printer.max_warn}s\t%#{Printer.max_crit}s\t%#{Printer.max_current}s\t%#{Printer.max_state}s\t%#{Printer.max_msg}s\n"

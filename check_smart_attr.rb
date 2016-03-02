@@ -2,9 +2,9 @@
 require 'smart_status'
 require 'pp'
 device_valid = SMARTStatus::Parser.new(ARGV[0])
-
+exit_code=0
 printlist=[]
-
+msg=""
 
 ########################################################################
 ## Error Handling for this script's arguments
@@ -96,6 +96,23 @@ else
 end
 
 
+########################################################################
+##  Offline uncorrectable
+########################################################################
+
+offline_uncorrect_attr=device_output[:offline_uncorrectable]
+offline_uncorrect_warn="-"
+
+if offline_uncorrect_attr.raw > offline_uncorrect_attr.threshold_value
+   offline_uncorrect_msg = "HDD failure is imminent."
+   offline_uncorrect_state="CRITICAL"
+else
+   offline_uncorrect_msg="Value within limits"
+   offline_uncorrect_state="OK"
+end
+
+
+
 
 ########################################################################
 ## the 'Printer' class for pretty printing
@@ -177,17 +194,34 @@ printlist <<reallocated_st
 current_pending_st=Printer.new("CurrentPendingSectorCount",curr_pending_warn.to_s,curr_pending_attr.threshold_value.to_s,curr_pending_attr.raw.to_s,curr_pending_state,curr_pending_msg)
 printlist <<current_pending_st
 
-
-
 spin_retry_ct=Printer.new("SpinRetryCount",spin_retry_warn.to_s,spin_retry_attr.threshold_value.to_s,spin_retry_attr.raw.to_s,spin_retry_state,spin_retry_msg)
 printlist <<spin_retry_ct
 
 
-format="%#{Printer.max_title}s\t%#{Printer.max_warn}s\t%#{Printer.max_crit}s\t%#{Printer.max_current}s\t%#{Printer.max_state}s\t%#{Printer.max_msg}s\n"
+offline_uncorrect_st=Printer.new("OffineUncorrectableErrors",offline_uncorrect_warn.to_s,offline_uncorrect_attr.threshold_value.to_s,offline_uncorrect_attr.raw.to_s,offline_uncorrect_state,offline_uncorrect_msg)
+printlist <<offline_uncorrect_st
+
+
+printlist.each do |p|
+    if p.state == "WARNING" && exit_code != 2
+    exit_code=1
+    msg="WARNING. Hardware faults detected in HDD."
+    elsif p.state == "CRITICAL"
+    exit_code=2
+    msg="CRITICAL. HDD failure imminent. Backup data and replace drive."
+    else 
+    msg="OK. HDD healthy."
+    end
+    end
+
+    puts "#{msg}\n\n"
+
+
+format="%-#{Printer.max_title}s\t%#{Printer.max_warn}s\t%#{Printer.max_crit}s\t%#{Printer.max_current}s\t%#{Printer.max_state}s\t%#{Printer.max_msg}s\n"
 printf(format, "Attribute", "Warn", "Crit","Current","State","Remarks")
 printf(format, "------", "-----", "----","----","----","------")
-
-#printf("----------------------------------------------------------\n")
 printlist.each do |p|
-    printf(format, p.title,p.warn,p.crit,p.current,p.state,p.msg)
-    end
+printf(format, p.title,p.warn,p.crit,p.current,p.state,p.msg)
+end
+
+exit exit_code

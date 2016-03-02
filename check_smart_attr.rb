@@ -1,10 +1,10 @@
 #!/usr/bin/ruby
 require 'smart_status'
-require 'pp'
+
 device_valid = SMARTStatus::Parser.new(ARGV[0])
-exit_code=0
-printlist=[]
-msg=""
+exit_code    = 0
+printlist    = []
+msg          = ""
 
 ########################################################################
 ## Error Handling for this script's arguments
@@ -19,23 +19,23 @@ end
 ## Calling smartcl
 ########################################################################
 
-device_output= device_valid.process
+device_output = device_valid.process
 
 
 ########################################################################
 ## Temperature Check  (WARN/OK)
 ########################################################################
 
-temp_attr=device_output[:temperature_celsius]
-temp_crit_value=45
-temp_warn_value="-"
+temp_attr = device_output[:temperature_celsius]
+temp_crit_value = 45
+temp_warn_value = "-"
 
 if temp_attr.raw > temp_crit_value
-   temp_msg="Value exceeds safe limits."
-   temp_state="WARNING"
+   temp_msg   = "Value exceeds safe limits."
+   temp_state = "WARNING"
 else 
-   temp_msg="Value within limits"
-   temp_state="OK"
+   temp_msg   = "Value within limits"
+   temp_state = "OK"
 end
 
 
@@ -45,24 +45,24 @@ end
 
 reallocated_attr=device_output[:reallocated_sector_ct]
 if reallocated_attr.raw > reallocated_attr.threshold_level
-   reallocated_msg = "HDD may fail."
-   reallocated_state="WARNING"
+   reallocated_msg   = "HDD may fail."
+   reallocated_state = "WARNING"
 
 elsif reallocated_attr.raw > reallocated_attr.threshold_value
-   reallocated_msg = "HDD failure is imminent."
-   reallocated_state="CRITICAL"
+   reallocated_msg   = "HDD failure is imminent."
+   reallocated_state = "CRITICAL"
 
 else
-   reallocated_msg="Value within limits"
-   reallocated_state="OK"
+   reallocated_msg   = "Value within limits"
+   reallocated_state = "OK"
 end
 
 ########################################################################
 ##  Current_Pending_Sector 
 ########################################################################
 
-curr_pending_attr=device_output[:current_pending_sector]
-curr_pending_warn="-"
+curr_pending_attr = device_output[:current_pending_sector]
+curr_pending_warn = "-"
 
 if curr_pending_attr.raw > reallocated_attr.threshold_value
    curr_pending_msg = "HDD failure is imminent."

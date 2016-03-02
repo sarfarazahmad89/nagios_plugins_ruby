@@ -61,16 +61,16 @@ end
 ##  Current_Pending_Sector 
 ########################################################################
 
-curr_pending_attr = device_output[:current_pending_sector]
-curr_pending_warn = "-"
+curr_pending_attr     = device_output[:current_pending_sector]
+curr_pending_warn     = "-"
 
 if curr_pending_attr.raw > reallocated_attr.threshold_value
-   curr_pending_msg = "HDD failure is imminent."
-   curr_pending_state="CRITICAL"
+   curr_pending_msg   = "HDD failure is imminent."
+   curr_pending_state = "CRITICAL"
 
 else
-   curr_pending_msg="Value within limits"
-   curr_pending_state="OK"
+   curr_pending_msg     = "Value within limits"
+   curr_pending_state   = "OK"
 end
 
 
@@ -78,21 +78,21 @@ end
 ##  Spin_Retry_Count
 ########################################################################
 
-spin_retry_attr=device_output[:spin_retry_count]
-spin_retry_warn=spin_retry_attr.threshold_value-spin_retry_attr.threshold_level
+spin_retry_attr         = device_output[:spin_retry_count]
+spin_retry_warn         = spin_retry_attr.threshold_value-spin_retry_attr.threshold_level
 
 
 
 if spin_retry_attr.raw > spin_retry_attr.threshold_value
-   spin_retry_msg = "HDD failure is imminent."
-   spin_retry_state="CRITICAL"
+   spin_retry_msg       = "HDD failure is imminent."
+   spin_retry_state     = "CRITICAL"
 elsif spin_retry_attr.raw > spin_retry_warn
-   spin_retry_msg = "HDD may fail ."
-   spin_retry_state="WARNING"
+   spin_retry_msg       = "HDD may fail ."
+   spin_retry_state     = "WARNING"
 
 else
-   spin_retry_msg="Value within limits"
-   spin_retry_state="OK"
+   spin_retry_msg       = "Value within limits"
+   spin_retry_state     = "OK"
 end
 
 
@@ -100,8 +100,8 @@ end
 ##  Offline uncorrectable
 ########################################################################
 
-offline_uncorrect_attr=device_output[:offline_uncorrectable]
-offline_uncorrect_warn="-"
+offline_uncorrect_attr = device_output[:offline_uncorrectable]
+offline_uncorrect_warn = "-"
 
 if offline_uncorrect_attr.raw > offline_uncorrect_attr.threshold_value
    offline_uncorrect_msg = "HDD failure is imminent."

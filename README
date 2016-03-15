@@ -2,6 +2,14 @@ Repository for Nagios/Icinga2 plugins written in Ruby.
 
 No installation framework is provided as of yet. Will be done once more plugins are added.
 
+## check_sata_errors.rb
+This plugin filters kernel ring buffer("dmesg") for SATA bus errors and raises a CRITICAL(exit code2) alarm if any such errors are found. 
+Regular Expressions are used to filter the kernel ring buffer. To add more SATA errors, please add to the REGEX array in the plugin file i.e check_sata_errors.rb
+
+
+## check_cpu_thermal.rb
+This plugin filters kernel ring buffer("dmesg") for Thermal Events raised by CPU(s), when its temperature reaches above the TDP.
+
 
 ## check_smart_attr.rb
 This is a Nagios/Icinga2 plugin that retrieves a couple of HDD S.M.A.R.T attributes and reports HDD health based on them.
@@ -14,12 +22,8 @@ For this plugin to work you need :
 * The Ruby Library that calls smartctl. Get the library from here https://github.com/AdMeGroup/smart_status. Credits for the library go to developer.
 	use "gem build;gem install" to install the gem.
 
-
 -- INSTALLATION
 You have to manually download the plugin and save it in what ever directory you want in your system(you can also use the default nagios directory /usr/lib64/nagios/plugins/ 
-
-
-
 -- USAGE
 call the plugin like this 
 /usr/lib64/nagios/plugins/check_smart_attr.rb <device_name>

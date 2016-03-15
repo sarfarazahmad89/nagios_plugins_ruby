@@ -5,7 +5,8 @@ require_relative "kmsgfilter.rb"
 ERRMSG="[WARNING]  CPU Temperature exceeds safe thresholds limit. Kernel error messages are displayed below\n"
 $ERR_EXIT=0 ## CPU Temperature errors are classified as warning"
 OKMSG="[OK] CPU Temperature within safe limits"
-KMSG=`dmesg`
+#KMSG=`dmesg`
+KMSG=`cat working_dir/dummydmesg`
 REGEX=[".*CPU[0-9].*temperature above.*"]
 $ERR=0
 $ERRLOG=[]

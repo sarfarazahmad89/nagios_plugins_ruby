@@ -6,7 +6,7 @@ if result.length == 0 && $ERR == 0
 $ERR=0
 else
 $ERR=1
-$ERRLOG << result
+$ERRLOG = $ERRLOG+ result
 end
 end
 end

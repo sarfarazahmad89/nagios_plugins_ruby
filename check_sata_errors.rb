@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
-require_relative "kmsgfilter.rb"
-require_relative "kernelmessage.rb"
+require_relative "include/kmsgfilter.rb"
+require_relative "include/kernelmessage.rb"
 
 ## Variables/Constants
 ERRMSG="[CRITICAL] SATA bus errors detected ! Please check SATA connections and HDD health(S.M.A.R.T).

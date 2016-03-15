@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require_relative "kmsgfilter.rb"
+require_relative "include/kmsgfilter.rb"
 
 ERRMSG="[WARNING]  CPU Temperature exceeds safe thresholds limit. Kernel error messages are displayed below\n"
 $ERR_EXIT=0 ## CPU Temperature errors are classified as warning"

@@ -8,7 +8,8 @@ Regular Expressions are used to filter the kernel ring buffer. To add more SATA 
 
 
 ## check_cpu_thermal.rb
-This plugin filters kernel ring buffer("dmesg") for Thermal Events raised by CPU(s), when its temperature reaches above the TDP.
+This plugin filters kernel ring buffer("dmesg") for Thermal Events raised by CPU(s), when its temperature reaches above the TDP. 
+Regex filters can be added to REGEX array in the plugin.
 
 
 ## check_smart_attr.rb

@@ -1,0 +1,9 @@
+# memory error on socket 0 ch 1 dimm 0
+CPU 0 2
+# nehalem
+PROCESSOR 0:0x106a0
+MCGCAP 0x400
+SOCKETID 0
+STATUS 0xa8000000000000b1
+MISC 0x00040000
+

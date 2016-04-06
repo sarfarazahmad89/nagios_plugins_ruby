@@ -1,0 +1,8 @@
+# memory error on page 00001a72000 socket 0 ch 0 dimm 0
+CPU 0 7
+# nehalem
+PROCESSOR 0:0x106a0
+SOCKETID 0
+STATUS 0x8c000000000000b0
+MISC 0x00000000
+ADDR 0x0022220f

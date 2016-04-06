@@ -1,0 +1,13 @@
+## MCELOG DAEMON
+ mcelog --ignorenodev --daemon --config-file /etc/mcelog/mcelog.conf --logfile /mcelog.new --foreground
+
+## MEMORY ERROR SAMPLE
+
+
+
+## PASSIVE CHECK RESULT ICINGA2
+echo -e "COMMAND [$(date +%s)] PROCESS_SERVICE_CHECK_RESULT;local;memory errors;3;Memory Errors encountered" | nc -U /var/run/icinga2/cmd/livestatus
+
+
+## Loop for memory errors
+ for i in {1..11}; do sleep 2s;mce-inject /mcelog/mce-inject/memory;  done

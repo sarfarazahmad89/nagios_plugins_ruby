@@ -3,12 +3,12 @@ require_relative "include/kmsgfilter.rb"
 require_relative "include/kernelmessage.rb"
 
 ## Variables/Constants
-ERRMSG="[CRITICAL] SATA bus errors detected ! Please check SATA connections and HDD health(S.M.A.R.T).
-Kernel error messages are displayed below. For more detailed information check /var/log/dmesg"
-OKMSG="[OK] No Sata Bus Errors detected."
+ERRMSG="[CRITICAL] Nvidia Kernel Driver reports errors. Please check the logs listed below or run \"dmesg\" for more information."
+DESCR="\nNote: Reported Error messages can be indicative of a hardware problem, an NVIDIA software problem, or a user application problem."
+OKMSG="[OK] Nvidia kernel driver does not report any errors."
 KMSG=`dmesg`
 $ERR_EXIT=0 
-REGEX=[ "\\[ .*ata[0-9].*DRDY.*",   "\\[ .*Emask.*ATA.*",".*ata[0-9].*SErr.*",   "\\[ .*ata[0-9].*error.*", "\\[ .*ata[0-9].*failed\scommand.*" ]
+REGEX=[ "\\[ .*NVRM.*Xid.*" ]
 $ERR=0
 $ERRLOG=[]
 ERRLOG_KMSG=[]
@@ -17,6 +17,7 @@ ERRLOG_KMSG=[]
 kmsg_filter
 if $ERR == 0
  puts "#{OKMSG}"
+ puts "#{DESCR}"
 else
  $ERRLOG.each do |x| 
  tmp_kmsg=Kernelmessage.new
@@ -31,6 +32,7 @@ ERRLOG_KMSG.each do |y|
  end
 
 ERR_EXIT=2  ## SATA Bus errors are always critical
+puts "#{DESCR}"
 exit ERR_EXIT
 end
 

@@ -3,8 +3,9 @@ require_relative "include/kmsgfilter.rb"
 require_relative "include/kernelmessage.rb"
 
 ## Variables/Constants
-ERRMSG="[CRITICAL] SATA bus errors detected ! Please check SATA connections and HDD health(S.M.A.R.T).
-Kernel error messages are displayed below. For more detailed information check /var/log/dmesg"
+ERRMSG="[CRITICAL] Correctable Memory errors detected ! "
+
+#Kernel error messages are displayed below. For more detailed information check /var/log/dmesg"
 OKMSG="[OK] No Sata Bus Errors detected."
 KMSG=`dmesg`
 $ERR_EXIT=0 
